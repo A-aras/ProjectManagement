@@ -1,0 +1,134 @@
+<!--
+  <p>
+    view-user works!
+  </p>
+-->
+<form [formGroup]="projectForm" class="form-horizontal formStyle">
+  <div class="container-fluid justify-content ">
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group form-inline">
+          <label for="projectInput" class="col-form-label col-2">Project :
+          </label>
+          <input id="projectInput" type="text" placeholder="Project Name..." class="form-control col-4" [formControl]="projectControl"
+          />
+          <div *ngIf="projectControl.invalid && projectControl.dirty && projectControl.errors?.required" class="alert alert-danger col-6">
+            Project is Required
+          </div>
+        </div>
+
+        <div class="form-group form-inline col-ignore-padding">
+          <div class="col-2"></div>
+          <div class="col-4 form-group form-inline col-ignore-padding">
+            <label class="checkbox-inline col-5 col-ignore-padding form-inline-leftAlign">
+              <input type="checkbox" class="form-check-input" [formControl]="dateRequiredControl" />&nbsp;&nbsp;&nbsp; Set Start and End Date</label>
+
+            <div class="form-group form-inline col-7 col-ignore-padding">
+              <form [formGroup]="dateFormGroup" class="form-horizontal col-12 col-ignore-padding">
+                <div class="col form-group form-inline col-ignore-padding">
+                  <div class="col-6 col-ignore-padding">
+                    <input id="startDateInput" type="text" placeholder="Start Date" class="form-control col" [formControl]="startDateControl"
+                      bsDatepicker [bsConfig]="{
+                        dateInputFormat: 'DD-MM-YYYY',
+                        containerClass: 'theme-dark-blue'
+                      }" />
+                  </div>
+                  <div class="col-6 col-ignore-padding">
+                    <input id="endDateInput" type="text" placeholder="End Date" class="form-control col" [formControl]="endDateControl" bsDatepicker
+                      [bsConfig]="{
+                        dateInputFormat: 'DD-MM-YYYY',
+                        containerClass: 'theme-dark-blue'
+                      }" />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="form-group form-inline col-ignore-padding">
+            <div *ngIf="dateFormGroup.invalid && dateFormGroup.dirty" class="alert alert-danger">
+              To Date must be greater than Start Date
+            </div>
+          </div>
+
+          <!--
+            <label for="lNameInput" class="fieldlabelleft col-2">Last Name: </label>
+            <input id="lNameInput" type="text" placeholder="Last Name" class="form-control col-4" [formControl]="lName">
+            <div *ngIf="lName.invalid && lName.dirty && lName.errors?.required" class="alert alert-danger col-6">
+              Last Name is Required
+            </div>
+          -->
+        </div>
+
+        <div class="form-group form-inline">
+          <label for="projectPriority" class="col-form-label col-2">
+            Priority:
+          </label>
+          <div class="col-4 col-ignore-padding">
+            <div>
+              <div class="float-left">0</div>
+              <div class="float-right">30</div>
+            </div>
+            <input type="range" min="0" max="30" class="form-control-range col-12" id="projectPriority" [formControl]="projectPriorityControl"
+            />
+          </div>
+          <div *ngIf="projectPriorityControl.invalid && projectPriorityControl.dirty && projectPriorityControl.errors?.required" class="alert alert-danger col-2">
+            Priority is required
+          </div>
+          <div *ngIf="projectPriorityControl.invalid && projectPriorityControl.dirty  && projectPriorityControl.errors?.min" class="alert alert-danger col-2">
+            Priority must be greater than {{ priorityMin }}
+          </div>
+          <div *ngIf="projectPriorityControl.invalid && projectPriorityControl.dirty  && projectPriorityControl.errors?.max" class="alert alert-danger col-2">
+            Priority must be less than {{ priorityMax }}
+          </div>
+        </div>
+
+        <div class="form-group form-inline">
+          <label for="managerInput" class="col-form-label col-2">Manager :
+          </label>
+          <div class="form-group form-inline col-4">
+            <input id="managerInput" type="text" placeholder="Manager..." class="form-control col-8" [formControl]="managerControl" />
+            <div *ngIf="managerControl.invalid && managerControl.dirty && managerControl.errors?.required" class="alert alert-danger col-6">
+              Manager is Required
+            </div>
+
+            <div class="form-group form-inline col-4">
+              <button class="btn btn-primary btn-action-margin" (click)="onSearchProjectManager()" value="Search">
+                Search
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="float-right">
+            <button class="btn btn-primary btn-action-margin" (click)="onProjectSave()" value="Add Project">{{btnAction}} Project</button>
+            <button class="btn btn-primary " value="Reset" type="reset">Reset</button>
+
+            <div class="modal fade" bsModal #alertModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
+              <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 id="dialog-static-name" class="modal-title pull-left">Confirm?</h4>
+                    <button type="button" class="close pull-right" aria-label="Close" (click)="alertModal.hide()">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Do you want to {{btnAction}} Project?</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="confirmAlertModal()">Yes</button>
+                    <button type="button" class="btn btn-default" (click)="declineAlertModal()">No</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <app-search-module [inputValue]="serarchInputValues" [columnsDisplay]="columnsDisplay" [fieldType]="popupModelType" [searchFields]="searchFields" (rowSelected)="HandleRowSelected($event)"></app-search-module>
+</form>

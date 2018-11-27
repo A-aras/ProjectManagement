@@ -1,0 +1,40 @@
+/* You can add global styles to this file, and also import other style files */
+
+html{font-size: 12px;}
+
+.label-block {
+    font-weight: normal;
+    display: block;
+    padding: 6px 12px;
+    margin: 0;
+    border: 1px solid transparent;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+    width: 100%;
+}
+
+.fieldlabelleft
+{
+    justify-content: left!important;
+}
+
+.formStyle
+{
+    margin-top: 50px!important;
+}
+
+.btn-action-margin
+{
+    margin-right: 20px!important;
+    /*margin-left: 20px!important;
+     padding-right: 20px!important;
+    padding-left: 20px!important; */
+}
+
+.btn-form-margin
+{
+    margin-left: 10px!important;
+}
