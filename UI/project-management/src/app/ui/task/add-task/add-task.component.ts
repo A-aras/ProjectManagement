@@ -118,10 +118,7 @@ export class AddTaskComponent implements OnInit {
 
   searchModalDisplayed: boolean = false;
   rowSelected: boolean = false;
-  selectedProject: ProjectModel;
-  selectedParentTask: TaskModel;
-  selectedUser: UserModel;
-
+  
   @ViewChild("projectSearchModal")
   searchModal: ModalDirective;
 
@@ -130,44 +127,37 @@ export class AddTaskComponent implements OnInit {
 
   DialogResult: Subject < boolean > = new Subject < boolean > ();
 
-  defaultProject: ProjectModel = {
-    EndDate: getTomorrowDate(),
-    Priority: 0,
-    Project: null,
-    ProjectId: -1,
-    ProjectManager: {
+  getDefaultUserModel():UserModel{
+    let defaultUser:UserModel   = {
       EmployeeId: -1,
       FirstName: "",
       LastName: "",
-      //ProjectId: -1,
-      //Task: null,
-      //TaskId: -1,
       UserId: -1
-    },
-    ProjectManagerId: -1,
-    StartDate: getCurrentDate(),
-    Tasks: null,
-    NoOfClosedTasks: 0,
-    IsActive: true
-  };
+    };
+    return defaultUser;
+  }
+  selectedUser: UserModel=this.getDefaultUserModel();
 
-  model: TaskModel = {
-    EndDate: getTomorrowDate(),
-    Priority: 0,
-    Project: {
-      EndDate: null,
-      IsActive: true,
-      NoOfClosedTasks: 0,
+  getDefaultProjectModel():ProjectModel{
+    let defaultProject:ProjectModel   = {
+      EndDate: getTomorrowDate(),
       Priority: 0,
-      Project: "",
+      Project: null,
       ProjectId: -1,
-      ProjectManager: null,
+      ProjectManager: this.selectedUser,
       ProjectManagerId: -1,
-      StartDate: null,
+      StartDate: getCurrentDate(),
       Tasks: null,
-    },
-    StartDate: getCurrentDate(),
-    ParentTask: {
+      NoOfClosedTasks:0,
+      IsActive:true
+    };
+    return defaultProject;
+  }
+
+  selectedProject: ProjectModel=this.getDefaultProjectModel();
+
+  getDefaultParentTaskModel():TaskModel{
+    let defaultParentTask:TaskModel={
       EndDate: null,
       ChildTasks: null,
       IsClosed: false,
@@ -182,33 +172,42 @@ export class AddTaskComponent implements OnInit {
       User: null,
       ProjectId:-1,
       UserId:-1
-    },
-    ChildTasks: null,
+    };
+    return defaultParentTask;
+  }
+
+  selectedParentTask: TaskModel=this.getDefaultParentTaskModel();
+
+  getDefaultTaskModel():TaskModel{
+    let defaultTask:TaskModel={
+      EndDate: getTomorrowDate(),
+      Priority: 0,
+      Project:this.getDefaultProjectModel(),
+      StartDate: getCurrentDate(),
+      ParentTask:this.getDefaultParentTaskModel(),
+      ChildTasks: null,
     IsParentTask: false,
     ParentTaskId: -1,
     TaskDescription: "",
     IsClosed: true,
     TaskId: -1,
-    User: {
-      EmployeeId: -1,
-      FirstName: "",
-      LastName: "",
-      //ProjectId: -1,
-      //Task: null,
-      //TaskId: -1,
-      UserId: -1
-    },ProjectId:-1,
-    UserId:-1
-  };
+    User:this.getDefaultUserModel(),
+    UserId:-1,
+    ProjectId:-1
+    }
+    return defaultTask;
+  }
+  
+  model: TaskModel = this.getDefaultTaskModel();
 
   
 
   // this.columnsDisplay=['Project','StartDate','EndDate'];
   //   this.searchFields=['Project'];
-  serarchInputValues: any[] = [this.defaultProject];
+  serarchInputValues: any[] = [this.selectedProject];
   columnsDisplay: string[] = ['Project', 'StartDate', 'EndDate'];
   searchFields: string[] = ['Project'];
-  popupModelType: string;
+  popupModelType: string="Project";
 
 
   constructor(
@@ -289,9 +288,10 @@ export class AddTaskComponent implements OnInit {
         this.model.StartDate = this.startDateControl.value;
         this.model.EndDate = this.endDateControl.value;
         this.model.Project = this.selectedProject;
-        this.model.ParentTask = this.selectedParentTask;
+        this.model.ParentTaskId= (this.selectedParentTask===null || this.selectedParentTask===undefined)?null:(this.selectedParentTask.TaskId===-1?null:this.selectedParentTask.TaskId);
+        this.model.ParentTask = (this.selectedParentTask===null || this.selectedParentTask===undefined)?null:(this.selectedParentTask.TaskId===-1?null:this.selectedParentTask);
         this.model.User = this.selectedUser;
-        this.model.ParentTaskId= (this.selectedParentTask===null || this.selectedParentTask===undefined)?null:this.selectedParentTask.TaskId;
+        
 
         this.model.UserId= (this.selectedUser===null || this.selectedUser===undefined)?null:this.selectedUser.UserId;
         this.model.ProjectId= (this.selectedProject===null || this.selectedProject===undefined)?null:this.selectedProject.ProjectId;
@@ -316,13 +316,13 @@ export class AddTaskComponent implements OnInit {
       if (this.btnAction === "Add") {
         this.service.AddTask(this.model).subscribe(x => {
           console.log("Task Added...");
-          this.router.navigate(["/ViewTasks"]);
+          this.router.navigate(["/ViewTask"]);
           //this.refreshProject();
         });
       } else if (this.btnAction === "Save") {
         this.service.UpdateTask(this.model).subscribe(x => {
           console.log("Task Updated...");
-          this.router.navigate(["/ViewTasks"]);
+          this.router.navigate(["/ViewTask"]);
           //this.refreshProject();
         });
       }
@@ -333,10 +333,12 @@ export class AddTaskComponent implements OnInit {
   UpdateValuesFromModelToFormsControls() {
     //this.projectControl.setValue(this.model.Project.ProjectId);
     this.taskControl.setValue(this.model.TaskDescription);
-    this.parentTaskControl.setValue(this.model.IsParentTask);
+    
     this.taskPriorityControl.setValue(this.model.Priority);
     if (this.model.ParentTask != null) {
+      this.selectedParentTask=this.model.ParentTask;
       this.parentTaskControl.setValue(this.model.ParentTask.TaskDescription);
+
     } else {
       this.parentTaskControl.setValue("");
     }
@@ -355,16 +357,20 @@ export class AddTaskComponent implements OnInit {
     }
 
     if (this.model.User != null) {
+      this.selectedUser=this.model.User;
       this.userControl.setValue(this.model.User.FirstName);
     } else {
       this.userControl.setValue("");
     }
 
     if (this.model.Project != null) {
+      this.selectedProject=this.model.Project;
       this.projectControl.setValue(this.model.Project.Project);
     } else {
       this.projectControl.setValue("");
     }
+
+    this.isParentTaskControl.setValue(this.model.IsParentTask); 
 
   }
 
@@ -456,10 +462,14 @@ export class AddTaskComponent implements OnInit {
           Validators.max(Const.priorityMax)
         ]);
 
-        this.parentTaskControl.enable();
+        this.parentTaskControl.disable();
 
-        this.userControl.enable();
+        this.projectControl .disable();
+
+        this.userControl.disable();
         this.userControl.setValidators([Validators.required]);
+
+        
 
       } else {
         this.startDateControl.disable();

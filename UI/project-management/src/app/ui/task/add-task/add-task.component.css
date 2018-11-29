@@ -9,3 +9,12 @@
     justify-content: flex-start!important;
     padding-left: 0px!important;
 }
+
+
+.btn-action-margin
+{
+    margin-right: 3px!important;
+    /* margin-left: 10px!important; */
+    /* padding-right: 20px!important;
+    padding-left: 20px!important; */
+}

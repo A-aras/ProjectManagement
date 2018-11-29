@@ -65,7 +65,37 @@ export class AddProjectComponent implements OnInit {
   btnAction = "Add";
   searchModalDisplayed: boolean = false;
   rowSelected: boolean = false;
-  selectedManager: UserModel;
+
+  getDefaultUserModel():UserModel{
+    let defaultUser:UserModel   = {
+      EmployeeId: -1,
+      FirstName: "",
+      LastName: "",
+      UserId: -1
+    };
+    return defaultUser;
+  }
+
+  selectedManager:UserModel=this.getDefaultUserModel();
+
+  getDefaultProjectModel():ProjectModel{
+    this.selectedManager=this.getDefaultUserModel();
+    let defaultProject:ProjectModel   = {
+      EndDate: getTomorrowDate(),
+      Priority: 0,
+      Project: null,
+      ProjectId: -1,
+      ProjectManager: this.selectedManager,
+      ProjectManagerId: -1,
+      StartDate: getCurrentDate(),
+      Tasks: null,
+      NoOfClosedTasks:0,
+      IsActive:true
+    };
+    return defaultProject;
+  }
+
+  
 
   serarchInputValues: any[] ;//= [this.defaultProject];
   columnsDisplay: string[] = ['FirstName', 'LastName', 'EmployeeId'];
@@ -80,23 +110,9 @@ export class AddProjectComponent implements OnInit {
 
   DialogResult: Subject<boolean> = new Subject<boolean>();
 
-  model: ProjectModel = {
-    EndDate: getTomorrowDate(),
-    Priority: 0,
-    Project: null,
-    ProjectId: -1,
-    ProjectManager: {
-      EmployeeId: -1,
-      FirstName: "",
-      LastName: "",
-      UserId: -1
-    },
-    ProjectManagerId: -1,
-    StartDate: getCurrentDate(),
-    Tasks: null,
-    NoOfClosedTasks:0,
-    IsActive:true
-  };
+  model: ProjectModel = this.getDefaultProjectModel();
+
+  
 
   constructor(
     private service: IPmApiService,
@@ -115,10 +131,18 @@ export class AddProjectComponent implements OnInit {
     this.serviceBus.ProjectEditObservable.subscribe(x => {
       this.btnAction = "Save";
       this.model = x;
+      this.selectedManager=x.ProjectManager;
       this.UpdateValuesFromModelToFormsControls();
     });
 
-    this.DialogResult.pipe(filter(x => x)).subscribe(x => {
+    this.DialogResult
+    .pipe(
+      filter(x =>{
+        return x;
+      }
+      )
+    )
+    .subscribe(x => {
       this.model.Project = this.projectControl.value;
       if(this.dateRequiredControl.value==true)
       {
@@ -155,9 +179,11 @@ export class AddProjectComponent implements OnInit {
 
   initFormsControl(): void {
     this.projectControl = new FormControl(
-      this.model.ProjectId,
+      this.model.Project,
       Validators.required
     );
+
+    //this.projectControl .disable();
 
     this.dateRequiredControl = new FormControl(false);
 
@@ -267,6 +293,7 @@ export class AddProjectComponent implements OnInit {
   }
 
   UpdateValuesFromModelToFormsControls() {
+    
     this.projectControl.setValue(this.model.Project);
     this.projectPriorityControl.setValue(this.model.Priority);
     this.managerControl.setValue(this.model.ProjectManager.FirstName);
@@ -290,15 +317,16 @@ export class AddProjectComponent implements OnInit {
   refreshProject(): void {
     this.btnAction = "Add";
     this.projectForm.reset();
-    this.model.IsActive=true;
-    this.model.Tasks=null;
-    this.model.ProjectId=-1;
-    this.model.Priority=0;
-    this.model.ProjectManager=null;
-    this.model.ProjectManagerId=null;
-    this.model.EndDate= getTomorrowDate();
-    this.model.StartDate= getCurrentDate();
-    this.model.Project="";
+    // this.model.IsActive=true;
+    // this.model.Tasks=null;
+    // this.model.ProjectId=-1;
+    // this.model.Priority=0;
+    // this.model.ProjectManager=null;
+    // this.model.ProjectManagerId=null;
+    // this.model.EndDate= getTomorrowDate();
+    // this.model.StartDate= getCurrentDate();
+    // this.model.Project="";
+    this.model=this.getDefaultProjectModel();
     this.UpdateValuesFromModelToFormsControls();
 
     this.serviceBus.ProjectSearchObservable.next(true);
@@ -344,6 +372,7 @@ export class AddProjectComponent implements OnInit {
     if (selectedValue[1]) {
         this.selectedManager = selectedValue[0];
         this.managerControl.setValue(this.selectedManager.FirstName);
+        //this.managerControl.markAsTouched();
     }
     // this.rowSelected = selectedValue[1];
     // this.selectedManager = selectedValue[0];

@@ -38,16 +38,21 @@ export class SortPipe implements PipeTransform {
 
   CompareObjects(a: any, b: any): number {
 
-    if (isNaN(parseFloat(a)) || !isFinite(a) || (isNaN(parseFloat(b)) || !isFinite(b)) )
-     {
-        if (a.toLowerCase() < b.toLowerCase()) return -1;
-        if (a.toLowerCase() > b.toLowerCase()) return 1;
-    } 
-    else if(isDate(a) || isDate(b))
+    if(isDate(a) || isDate(b))
     {
       if (a < b) return -1;
       if (a > b) return 1;
     }
+    else if( typeof a  === 'boolean' || typeof b  === 'boolean' )
+    {
+      if (a < b) return -1;
+      if (a > b) return 1;
+    }
+    else if (isNaN(parseFloat(a)) || !isFinite(a) || (isNaN(parseFloat(b)) || !isFinite(b)) )
+     {
+        if (a.toLowerCase() < b.toLowerCase()) return -1;
+        if (a.toLowerCase() > b.toLowerCase()) return 1;
+    } 
     else 
     {
       if (parseFloat(a) < parseFloat(b)) return -1;

@@ -26,6 +26,7 @@ import {
 } from "ngx-bootstrap";
 import { priorityMin, priorityMax } from "src/app/Const/const";
 import { ProjectDashboardComponent } from './project-dashboard.component';
+import { PmApiServiceFake } from "../../../service/pm-api.service.fake";
 
 describe('SearchModuleComponent', () => {
   let location: Location;
@@ -36,7 +37,7 @@ describe('SearchModuleComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      providers: [{ provide: IPmApiService, useClass: PMApiServiceMockData }],
+      providers: [{ provide: IPmApiService, useClass: PmApiServiceFake  }],
       //declarations: [ AddUserComponent ]
       imports: [
         AppModule,

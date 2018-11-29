@@ -18,6 +18,8 @@ import { PmServiceBus } from "src/app/service/service_bus";
 import { ProjectModel } from "src/app/model/project-model";
 import { TaskModel } from "src/app/model/task-model";
 import { Router } from "@angular/router";
+import { getTomorrowDate, getCurrentDate } from "../../../utils/date-util";
+import { BsModalService } from "ngx-bootstrap";
 
 
 @Component({
@@ -30,12 +32,35 @@ export class ViewTaskComponent implements OnInit {
   searchForm: FormGroup;
   searchInputControl: FormControl;
 
+  getDefaultProjectModel(): ProjectModel {
+    let defaultProject: ProjectModel = {
+      EndDate: getTomorrowDate(),
+      Priority: 0,
+      Project: null,
+      ProjectId: -1,
+      ProjectManager: null,
+      ProjectManagerId: -1,
+      StartDate: getCurrentDate(),
+      Tasks: null,
+      NoOfClosedTasks: 0,
+      IsActive: true
+    };
+    return defaultProject;
+  }
+
+  selectedProject: ProjectModel = this.getDefaultProjectModel();
+
   @Input()
   tasks: TaskModel[];
 
   sortBy: String = "StartDate";
 
-  searchUserInputValue:string="";
+  //searchUserInputValue:string="";
+
+  serarchInputValues: any[] = [this.selectedProject];
+  columnsDisplay: string[] = ['Project', 'StartDate', 'EndDate'];
+  searchFields: string[] = ['Project'];
+  popupModelType: string = "Project";
 
   ngAfterViewInit(): void {
     //throw new Error("Method not implemented.");
@@ -44,34 +69,39 @@ export class ViewTaskComponent implements OnInit {
   constructor(
     private service: IPmApiService,
     private serviceBus: PmServiceBus,
-    public router: Router
+    public router: Router,
+    private modalService: BsModalService,
   ) {
     this.initFormsControl();
   }
 
   ngOnInit() {
-    this.loadTaskModel();
-    this.serviceBus.ProjectSearchObservable.subscribe(x => {
-      this.loadTaskModel();
-    });
+    //this.loadTaskModel();
+    // this.serviceBus.ProjectSearchObservable.subscribe(x => {
+    //   this.loadTaskModel();
+    // });
   }
 
   private initFormsControl() {
-    this.searchInputControl = new FormControl(this.searchUserInputValue);
-    
+    this.searchInputControl = new FormControl(this.selectedProject.Project);
+    this.searchInputControl.disable();
 
     this.searchForm = new FormGroup({
       searchInputControl: this.searchInputControl
     });
 
-    this.searchForm.valueChanges.subscribe(x=>
+    this.searchInputControl.valueChanges.subscribe(x=>
       {
-        this.searchUserInputValue=this.searchInputControl.value;
+        this.loadTaskModel();
       });
+    // this.searchForm.valueChanges.subscribe(x=>
+    //   {
+    //     this.searchUserInputValue=this.searchInputControl.value;
+    //   });
   }
 
   loadTaskModel(): void {
-    this.service.getTasks().subscribe(x => {
+    this.service.getAllTaskForProject(this.selectedProject).subscribe(x => {
       this.tasks = x;
     });
   }
@@ -93,21 +123,36 @@ export class ViewTaskComponent implements OnInit {
     this.sortBy = field;
   }
 
-  OnEditTask(task:TaskModel) {
+  OnEditTask(task: TaskModel) {
     this.router.navigate(['EditTask', task.TaskId]);
   }
 
-  OnEndTask(task:TaskModel) {
-    task.EndDate=new Date();
-    task.IsClosed=true;
+  OnEndTask(task: TaskModel) {
+    task.EndDate = new Date();
+    task.IsClosed = true;
     this.service.UpdateTask(task).subscribe(x => {
       console.log("Task Ended...");
       this.loadTaskModel();
     });
   }
 
-  searchProject():void
-  {
-    
+  onSearchProject() {
+    //let displayColumn:string[]={};
+    this.columnsDisplay = ['Project', 'StartDate', 'EndDate'];
+    this.searchFields = ['Project'];
+    this.popupModelType = "Project";
+    this.service.getProjects().subscribe(x => {
+      this.serarchInputValues = x;
+      this.serviceBus.CommonSearchObservable.next(true);
+    });
+  }
+
+  HandleRowSelected(selectedValue: [any, boolean, string]) {
+    if (selectedValue[1]) {
+      if (selectedValue[2] === "Project") {
+        this.selectedProject = selectedValue[0];
+        this.searchInputControl.setValue(this.selectedProject.Project);
+      }
+    }
   }
 }

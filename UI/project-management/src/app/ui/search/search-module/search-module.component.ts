@@ -6,7 +6,9 @@ import {
   OnChanges,
   SimpleChanges,
   EventEmitter,
-  ViewChild
+  ViewChild,
+  TemplateRef,
+  OnDestroy,
 } from "@angular/core";
 import {
   FormArray,
@@ -41,15 +43,16 @@ import {
 import {
   Output
 } from "@angular/core";
-import { BsModalService, ModalDirective } from "ngx-bootstrap/modal";
+import { BsModalService, ModalDirective, BsModalRef } from "ngx-bootstrap/modal";
 import { ProjectModel } from "src/app/model/project-model";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-search-module',
   templateUrl: './search-module.component.html',
   styleUrls: ['./search-module.component.css']
 })
-export class SearchModuleComponent implements OnInit
+export class SearchModuleComponent implements OnInit,OnDestroy
 //, OnChanges 
 {
 
@@ -82,13 +85,18 @@ export class SearchModuleComponent implements OnInit
   @Output()
   rowSelected = new EventEmitter <[any, boolean,string]> ();
 
-  @ViewChild("searchModal")
-  searchModal: ModalDirective;
+  // @ViewChild("searchModal")
+  // searchModal: ModalDirective;
+
+  @ViewChild('searchModel')
+  private searchModelTemplate: TemplateRef<any>;
+
+  searchBsModelRef:BsModalRef;
 
   // users: UserModel[];
 
   selectedRow:any;
-
+  searchSubscription$: Subscription;
   // selectedUser: UserModel = {
   //   EmployeeId: -1,
   //   FirstName: "",
@@ -107,15 +115,20 @@ export class SearchModuleComponent implements OnInit
     this.initFormsControl();
   }
 
+
   ngOnInit() {
 
-    this.serviceBus.CommonSearchObservable.subscribe(x=>{
-      this.searchModal.show();
+    this.searchSubscription$ = this.serviceBus.CommonSearchObservable.subscribe(x=>{
+      this.searchBsModelRef       = this.modalService.show(this.searchModelTemplate, {
+        backdrop: true,
+        ignoreBackdropClick: false
+      });
     });
-    //this.loadUserDetails();
-    // this.serviceBus.UserSearchObservable.subscribe(x => {
-    //   this.loadUserDetails();
-    // });
+  }
+
+  ngOnDestroy() {
+    if(this.searchSubscription$!=null && this.searchSubscription$!=undefined)
+    this.searchSubscription$.unsubscribe();
   }
 
   private initFormsControl() {
@@ -158,12 +171,15 @@ export class SearchModuleComponent implements OnInit
   }
 
   confirm(): void {
-    this.searchModal.hide();
+    //this.searchModal.hide();
+    this.searchBsModelRef.hide();
     this.rowSelected.next([this.selectedRow,this.selectedRow!=null,this.fieldType])
   }
 
   decline(): void {
-    this.searchModal.hide();
+    // this.searchModal.hide();
+    // this.modalService._hideBackdrop();
+    this.searchBsModelRef.hide();
     this.rowSelected.next([this.selectedRow,false,this.fieldType])
   }
 }

@@ -13,6 +13,7 @@ import { switchMap } from "rxjs/internal/operators/switchMap";
 import { mergeMap } from "rxjs/internal/operators/mergeMap";
 import { filter } from "rxjs/internal/operators/filter";
 import { IPmApiService } from "src/app/service/pm-api.service-interface";
+
 import { UserModel } from "src/app/model/user-model";
 import { PmServiceBus } from "src/app/service/service_bus";
 
@@ -86,4 +87,5 @@ export class ViewUserComponent implements OnInit, AfterViewInit {
   onSort(field: string): void {
     this.sortBy = field;
   }
+  
 }

@@ -9,10 +9,8 @@ import {environment} from 'src/environments/environment';
 
 import { TaskModel } from '../model/task-model';
 import { ProjectModel } from '../model/project-model';
-//import { ParentTaskModel } from '../model/parent-task-model';
 import { UserModel } from '../model/user-model';
 import { IPmApiService } from './pm-api.service-interface';
-
 
 @Injectable()
 export class PmApiService extends IPmApiService {
@@ -25,6 +23,22 @@ export class PmApiService extends IPmApiService {
     getParentTasks(): Observable<TaskModel[]> {
         return this.httpService.get<TaskModel[]>( environment.ApiService+"/Task/GetParentTasks");
     }
+
+     getAllTaskForProject(project: ProjectModel): Observable<TaskModel[]>
+     {
+        let header = new HttpHeaders();
+        let params=new HttpParams();
+        header.append('Contetnt-Type','application/json');
+
+        params=params.set("ProjectId", project.ProjectId.toString());  
+        params=params.set("Project",project.Project);
+    
+        //let body=new HttpBody();
+    
+        let requestOptions={headers:header,params:params};
+        return this.httpService.get<TaskModel[]>(environment.ApiService+"/Task/GetAllTaskForProject",requestOptions);
+     }
+
     AddTask(task: TaskModel) {
         return this.httpService.post(environment.ApiService+"/Task/AddTask", task);
     }

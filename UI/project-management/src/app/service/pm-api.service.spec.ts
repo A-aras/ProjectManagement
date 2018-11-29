@@ -1,8 +1,8 @@
 import { TestBed, getTestBed, inject } from '@angular/core/testing';
 import { PmApiService } from './pm-api.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { PMApiServiceMockData } from 'src/app/Service/pm-api.service.mock';
 import { environment } from 'src/environments/environment';
+import { PMApiServiceMockData } from './pm-api.service.mock';
 
 
 describe('PmApiService', () => {

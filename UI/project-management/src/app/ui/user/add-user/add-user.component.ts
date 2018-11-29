@@ -47,7 +47,7 @@ export class AddUserComponent implements OnInit {
     //ProjectId: 0,
     //Task: null,
     //TaskId: 0,
-    UserId: 0
+    UserId: 0,
   };
 
   @ViewChild("alertModal")
@@ -166,6 +166,7 @@ export class AddUserComponent implements OnInit {
     // this.model.TaskId=0;
     // this.model.UserId=0;
     //this.initFormsControl();
+    this.model.UserId=-1;
     this.btnAction = "Add";
     this.userForm.reset();
     this.serviceBus.UserSearchObservable.next(true);
