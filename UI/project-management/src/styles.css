@@ -27,7 +27,7 @@ html {
 }
 
 .btn-action-margin {
-  margin-right: 20px !important;
+  margin-right: 3px !important;
   /*margin-left: 20px!important;
      padding-right: 20px!important;
     padding-left: 20px!important; */
@@ -93,6 +93,60 @@ html {
         /* padding-right: 15px !important; */
     }
   }
+
+  .details-header-panel-height
+  {
+    height: 30%!important;
+    width: 100%!important;
+  }
+
+  .details-details-panel-height
+  {
+    height: 70%!important;
+    width: 100%!important;
+  }
+
+  @media screen and (max-width: 768px) {
+    .details-header-panel-height
+    {
+      height: 40%!important;
+      width: 100%!important;
+    }
+  
+    .details-details-panel-height
+    {
+      height: 60%!important;
+      width: 100%!important;
+    } 
+  }
+
+  .reponseiveDetailsRowMargin {
+    /* padding-bottom: 5px !important; */
+    padding-top: 5px !important;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .reponseiveDetailsRowMargin {
+      padding-bottom: 0px;
+      padding-top: 0px;
+    }
+  }
+
+  
+  .date-check-box-responsive {
+    padding-top: 8px !important;
+  }
+
+  @media screen and (max-width:768px)
+  {
+    .date-check-box-responsive {
+        padding-top: 1px !important;
+      }
+  }
+  /* .reponseiveRowMargin {
+    padding-bottom: 1px;
+    padding-top: 1px;
+  } */
 
 /* .btn-form-margin
     {

@@ -131,14 +131,14 @@ describe('AddProjectComponent', () => {
      expect(component.dateFormGroup.valid).toBe(true);
   });
 
-  it("When Project Manager not selected then validation should fail", () => {
-    expect(component).toBeTruthy();
-    component.selectedManager=PMApiServiceMockData.User1;
-    component.model.ProjectManager=component.selectedManager;
-    component.model.ProjectManagerId=component.selectedManager.UserId;
-    component.UpdateValuesFromModelToFormsControls();
-    expect(component.managerControl.valid).toBe(true);
-  });
+  // it("When Project Manager not selected then validation should fail", () => {
+  //   expect(component).toBeTruthy();
+  //   component.selectedManager=PMApiServiceMockData.User1;
+  //   component.model.ProjectManager=component.selectedManager;
+  //   component.model.ProjectManagerId=component.selectedManager.UserId;
+  //   component.UpdateValuesFromModelToFormsControls();
+  //   expect(component.managerControl.valid).toBe(true);
+  // });
 
   it("When Priority less than min should fail for priorty", () => {
     expect(component).toBeTruthy();

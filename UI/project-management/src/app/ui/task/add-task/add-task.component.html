@@ -1,4 +1,4 @@
-<form [formGroup]="taskForm" class="form-horizontal formStyle" style="margin-top: 100px!important">
+<form [formGroup]="taskForm" class="form-horizontal formStyle" >
   <div class="container-fluid justify-content ">
     <div class="row container-fluid reponseiveRowMargin">
       <div class="row container-fluid reponseiveRowMargin">
@@ -7,7 +7,7 @@
         <input id="projectInput" type="text" placeholder="Project..." class="form-control col-sm-5" [formControl]="projectControl"
         />
         <div class="form-group form-inline col-sm-2 col-ignore-padding">
-          <button class="btn btn-primary btn-reponsive-margin" (click)="onSearchProject()" value="Search">
+          <button class="btn btn-primary btn-reponsive-margin" (click)="onSearchProject()" value="Search" [disabled]="btnAction==='Save'">
             Search
           </button>
         </div>

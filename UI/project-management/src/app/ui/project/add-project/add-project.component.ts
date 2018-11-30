@@ -257,6 +257,7 @@ export class AddProjectComponent implements OnInit {
       this.model.ProjectManager.FirstName,
       Validators.required
     );
+    this.managerControl.disable();
 
     this.projectForm = new FormGroup({
       projectControl: this.projectControl,
