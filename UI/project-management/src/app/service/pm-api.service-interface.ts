@@ -30,6 +30,8 @@ export abstract class IPmApiService {
 
   abstract getParentTasks(): Observable < TaskModel[] > ;
 
+  abstract getAllParentTasksForProject(project: ProjectModel): Observable < TaskModel[] > ;
+
   abstract getAllTaskForProject(project: ProjectModel): Observable < TaskModel[] > ;
 
   abstract AddTask(task: TaskModel);

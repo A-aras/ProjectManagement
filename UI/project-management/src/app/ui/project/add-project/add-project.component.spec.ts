@@ -28,6 +28,7 @@ import { priorityMin, priorityMax } from "src/app/Const/const";
 
 import { AddProjectComponent } from './add-project.component';
 import { PmApiServiceFake } from "../../../service/pm-api.service.fake";
+import { AppModuleUnitTestFixture } from "src/app/app.module.unittest.fixture";
 
 describe('AddProjectComponent', () => {
   let routerMock: any;
@@ -47,7 +48,7 @@ describe('AddProjectComponent', () => {
       providers: [{ provide: IPmApiService, useClass: PmApiServiceFake }],
       //declarations: [ AddUserComponent ]
       imports: [
-        AppModule,
+        AppModuleUnitTestFixture,
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
@@ -131,14 +132,14 @@ describe('AddProjectComponent', () => {
      expect(component.dateFormGroup.valid).toBe(true);
   });
 
-  // it("When Project Manager not selected then validation should fail", () => {
-  //   expect(component).toBeTruthy();
-  //   component.selectedManager=PMApiServiceMockData.User1;
-  //   component.model.ProjectManager=component.selectedManager;
-  //   component.model.ProjectManagerId=component.selectedManager.UserId;
-  //   component.UpdateValuesFromModelToFormsControls();
-  //   expect(component.managerControl.valid).toBe(true);
-  // });
+  it("When Project Manager not selected then validation should fail", () => {
+    expect(component).toBeTruthy();
+    component.selectedManager=PMApiServiceMockData.User1;
+    component.model.ProjectManager=component.selectedManager;
+    component.model.ProjectManagerId=component.selectedManager.UserId;
+    component.UpdateValuesFromModelToFormsControls();
+    expect(component.managerControl.valid).toBe(true);
+  });
 
   it("When Priority less than min should fail for priorty", () => {
     expect(component).toBeTruthy();

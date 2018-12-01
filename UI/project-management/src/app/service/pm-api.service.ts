@@ -14,6 +14,17 @@ import { IPmApiService } from './pm-api.service-interface';
 
 @Injectable()
 export class PmApiService extends IPmApiService {
+    getAllParentTasksForProject(project: ProjectModel): Observable<TaskModel[]> {
+        let header = new HttpHeaders();
+        let params=new HttpParams();
+        header.append('Contetnt-Type','application/json');
+
+        params=params.set("ProjectId", project.ProjectId.toString());  
+        params=params.set("Project",project.Project);
+    
+        let requestOptions={headers:header,params:params};
+        return this.httpService.get<TaskModel[]>(environment.ApiService+"/Task/GetParentTasksForProject",requestOptions);
+    }
     getTaskById(id: number): Observable<TaskModel> {
         return this.httpService.get<TaskModel>( environment.ApiService+"/Task/GetTaskById/"+id);
     }

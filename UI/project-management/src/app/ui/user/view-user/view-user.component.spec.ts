@@ -27,6 +27,7 @@ import {
 import { priorityMin, priorityMax } from "src/app/Const/const";
 import { ViewUserComponent } from "src/app/ui/user/view-user/view-user.component";
 import { PmApiServiceFake } from "../../../service/pm-api.service.fake";
+import { AppModuleUnitTestFixture } from "src/app/app.module.unittest.fixture";
 
 
 describe('ViewUserComponent', () => {
@@ -46,7 +47,7 @@ describe('ViewUserComponent', () => {
     TestBed.configureTestingModule({
       providers: [{ provide: IPmApiService, useClass: PmApiServiceFake }],
       imports: [
-        AppModule,
+        AppModuleUnitTestFixture,
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
@@ -68,8 +69,8 @@ describe('ViewUserComponent', () => {
      component.ngOnInit();
   });
 
-  // it('When view user Component Created Injector Injects all required Inputs should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
+  it('When view user Component Created Injector Injects all required Inputs should create', () => {
+    expect(component).toBeTruthy();
+  });
 
 });

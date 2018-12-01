@@ -15,8 +15,12 @@ import { IPmApiService } from './pm-api.service-interface';
 import { PMApiServiceMockData } from './pm-api.service.mock';
 
 
+
 @Injectable()
 export class PmApiServiceFake extends IPmApiService {
+    getAllParentTasksForProject(project: ProjectModel): Observable<TaskModel[]> {
+        throw new Error("Method not implemented.");
+    }
     getUsers(): Observable<UserModel[]> {
         return of(PMApiServiceMockData.Users);
     }
@@ -30,8 +34,9 @@ export class PmApiServiceFake extends IPmApiService {
         throw new Error("Method not implemented.");
     }
     getProjects(): Observable<ProjectModel[]> {
-        throw new Error("Method not implemented.");
+            return of(PMApiServiceMockData.Projects);
     }
+    
     AddProject(project: ProjectModel) {
         throw new Error("Method not implemented.");
     }
@@ -39,7 +44,7 @@ export class PmApiServiceFake extends IPmApiService {
         throw new Error("Method not implemented.");
     }
     getTasks(): Observable<TaskModel[]> {
-        throw new Error("Method not implemented.");
+        return of(PMApiServiceMockData.Tasks);
     }
     getTaskById(id: number): Observable<TaskModel> {
         throw new Error("Method not implemented.");

@@ -28,6 +28,8 @@ import { priorityMin, priorityMax } from "src/app/Const/const";
 
 import { UserDashboardComponent } from './user-dashboard.component';
 import { PmServiceBus } from "src/app/service/service_bus";
+import { AppModuleUnitTestFixture } from "src/app/app.module.unittest.fixture";
+import { PmApiServiceFake } from "src/app/service/pm-api.service.fake";
 
 describe('UserDashboardComponent', () => {
   let routerMock: any;
@@ -39,11 +41,11 @@ describe('UserDashboardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      providers: [{ provide: IPmApiService, useClass: PMApiServiceMockData },{provide:PmServiceBus},{provide:APP_BASE_HREF, useValue:'/'}
+      providers: [{ provide: IPmApiService, useClass: PmApiServiceFake },{provide:PmServiceBus},{provide:APP_BASE_HREF, useValue:'/'}
        ],
       //declarations: [ AddUserComponent ]
       imports: [
-        AppModule,
+        AppModuleUnitTestFixture,
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
@@ -66,8 +68,8 @@ describe('UserDashboardComponent', () => {
   });
 
 
-  // it('When User Dashboard  Component Created Injector Injects all required Inputs should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
+  it('When User Dashboard  Component Created Injector Injects all required Inputs should create', () => {
+    expect(component).toBeTruthy();
+  });
 
 });

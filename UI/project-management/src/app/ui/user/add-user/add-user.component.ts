@@ -41,7 +41,7 @@ export class AddUserComponent implements OnInit {
   btnAction = "Add";
 
   model: UserModel = {
-    EmployeeId: 0,
+    EmployeeId: null,
     FirstName: "",
     LastName: "",
     //ProjectId: 0,
@@ -121,9 +121,9 @@ export class AddUserComponent implements OnInit {
 
   private initFormsControl() {
     this.fName = new FormControl(this.model.FirstName, Validators.required);
-    this.lName = new FormControl(this.model.LastName, [Validators.required]);
+    this.lName = new FormControl(this.model.LastName, Validators.required);
 
-    this.empId = new FormControl(this.model.EmployeeId, [Validators.required]);
+    this.empId = new FormControl(this.model.EmployeeId, Validators.required);
 
     this.userForm = new FormGroup({
       fName: this.fName,

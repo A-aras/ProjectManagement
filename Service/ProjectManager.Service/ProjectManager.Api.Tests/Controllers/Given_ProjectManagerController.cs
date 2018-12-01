@@ -76,7 +76,7 @@ namespace ProjectManager.Api.Tests.Controllers
             // Arrange
             var user = ProjectManagerFakeData.UserFakeData.User1.DeepCopy() as UserModel;
             user.UserId = -1;
-            
+
             // Act
             var result = Controller.AddUser(user);
 
@@ -194,6 +194,32 @@ namespace ProjectManager.Api.Tests.Controllers
             Assert.AreEqual(ProjectManagerFakeData.UserFakeData.AllUsers.Count(), result.Count());
         }
 
+        [TestCase]
+        public void When_DeleteNonExistingUser_Then_NotFoundReceived()
+        {
+            // Arrange & Act
+            var result = Controller.DeleteUser(-1);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf<NotFoundResult>(result);
+        }
+
+        [TestCase]
+        public void When_DeleteExistingUser_Then_Deleted()
+        {
+            // Arrange & Act
+            var result = Controller.DeleteUser(1);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<UserModel>>(result);
+            var castedResult = result as OkNegotiatedContentResult<UserModel>;
+            Assert.AreEqual(1, castedResult.Content.UserId);
+
+        }
+
+
         #endregion
 
         #region Project
@@ -245,7 +271,7 @@ namespace ProjectManager.Api.Tests.Controllers
         {
             // Arrange
             var project = ProjectManagerFakeData.ProjectFakeData.Project1.DeepCopy() as ProjectModel;
-            
+
 
             // Act
             var result = Controller.AddProject(project);
@@ -260,7 +286,7 @@ namespace ProjectManager.Api.Tests.Controllers
         {
             // Arrange
             var project = ProjectManagerFakeData.ProjectFakeData.Project1.DeepCopy() as ProjectModel;
-            project.Project = null; 
+            project.Project = null;
 
             // Act
             Controller.ModelState.AddModelError("Project", "Project required");
@@ -311,7 +337,7 @@ namespace ProjectManager.Api.Tests.Controllers
             project.Project = "Project Updated";
 
             // Act
-            
+
             var result = Controller.UpdateProject(project);
 
             // Assert
@@ -512,7 +538,18 @@ namespace ProjectManager.Api.Tests.Controllers
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(ProjectManagerFakeData.TaskFakeData.AllTasks.Where(x=>x.IsParentTask).Count(), result.Count());
+            Assert.AreEqual(ProjectManagerFakeData.TaskFakeData.AllTasks.Where(x => x.IsParentTask).Count(), result.Count());
+        }
+
+        [TestCase]
+        public void When_GetParentTasksForProject_Then_AllParentTaskRelatedToProjectReceived()
+        {
+            // Arrange & Act
+            var result = Controller.GetParentTasksForProject(ProjectManagerFakeData.ProjectFakeData.Project1);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(ProjectManagerFakeData.TaskFakeData.AllTasks.Where(x => x.IsParentTask && x.ProjectId == ProjectManagerFakeData.ProjectFakeData.Project1.ProjectId).Count(), result.Count());
         }
 
         [TestCase]
@@ -525,6 +562,18 @@ namespace ProjectManager.Api.Tests.Controllers
             // Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(ProjectManagerFakeData.TaskFakeData.Project1_ParentTask1, result);
+        }
+
+        [TestCase]
+        public void When_GetAllTaskForProject_Then_AllTaskReceivedForProjectReceived()
+        {
+            // Arrange & Act
+            var result = Controller.GetAllTaskForProject(ProjectManagerFakeData.ProjectFakeData.Project1);
+
+            // Assert
+            Assert.IsNotNull(result);
+
+            Assert.AreEqual(ProjectManagerFakeData.TaskFakeData.AllTasks.Where(x => x.ProjectId == ProjectManagerFakeData.ProjectFakeData.Project1.ProjectId).Count(), result.Count());
         }
 
         #endregion

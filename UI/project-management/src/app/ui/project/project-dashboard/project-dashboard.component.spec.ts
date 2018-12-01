@@ -27,8 +27,9 @@ import {
 import { priorityMin, priorityMax } from "src/app/Const/const";
 import { ProjectDashboardComponent } from './project-dashboard.component';
 import { PmApiServiceFake } from "../../../service/pm-api.service.fake";
+import { AppModuleUnitTestFixture } from "src/app/app.module.unittest.fixture";
 
-describe('SearchModuleComponent', () => {
+describe('ProjectDashboardComponent', () => {
   let location: Location;
   let routerSpy: Router;
   let service: IPmApiService;
@@ -40,7 +41,7 @@ describe('SearchModuleComponent', () => {
       providers: [{ provide: IPmApiService, useClass: PmApiServiceFake  }],
       //declarations: [ AddUserComponent ]
       imports: [
-        AppModule,
+        AppModuleUnitTestFixture,
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,

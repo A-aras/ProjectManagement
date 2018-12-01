@@ -22,7 +22,6 @@ namespace ProjectManager.API.Controllers
         }
 
 
-        // GET: api/Task
         [Route("api/User/GetUsers")]
         [HttpGet]
         public ICollection<UserModel> GetUsers()
@@ -80,25 +79,24 @@ namespace ProjectManager.API.Controllers
             return BadRequest();
         }
 
-        //[Route("api/User/DeleteUser/{userId:int}")]
-        //[ResponseType(typeof(UserModel))]
-        //[HttpDelete]
-        //public IHttpActionResult DeleteUser(int userId)
-        //{
+        [Route("api/User/DeleteUser/{userId:int}")]
+        [ResponseType(typeof(UserModel))]
+        [HttpDelete]
+        public IHttpActionResult DeleteUser(int userId)
+        {
+            UserModel userModel = pmService.GetUserById(userId);
+            if (userModel == null)
+            {
+                return NotFound();
+            }
+            var result = pmService.DeleteUser(userModel);
 
-        //    UserModel userModel = pmService.GetUserById(userId);
-        //    if (userModel == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var result = pmService.DeleteUser(userModel);
-
-        //    if (result)
-        //    {
-        //        return Ok(userModel);
-        //    }
-        //    return BadRequest();
-        //}
+            if (result)
+            {
+                return Ok(userModel);
+            }
+            return BadRequest();
+        }
 
         [Route("api/Project/GetProjects")]
         [HttpGet]
@@ -120,7 +118,7 @@ namespace ProjectManager.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            ProjectModel proj= pmService.GetProjectById(project.ProjectId);
+            ProjectModel proj = pmService.GetProjectById(project.ProjectId);
             if (proj != null)
             {
                 return BadRequest();
@@ -158,32 +156,29 @@ namespace ProjectManager.API.Controllers
             return BadRequest();
         }
 
-
-        //[Route("api/User/DeleteUser/{userId:int}")]
-        //[ResponseType(typeof(UserModel))]
-        //[HttpDelete]
-        //public IHttpActionResult DeleteUser(int userId)
-        //{
-
-        //    UserModel userModel = pmService.GetUserById(userId);
-        //    if (userModel == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var result = pmService.DeleteUser(userModel);
-
-        //    if (result)
-        //    {
-        //        return Ok(userModel);
-        //    }
-        //    return BadRequest();
-        //}
-
         [Route("api/Task/GetTasks")]
         [HttpGet]
         public ICollection<TaskModel> GeTasks()
         {
             var result = pmService.GetTasks();
+            Console.WriteLine(result.ToString());
+            return result;
+        }
+
+        [Route("api/Task/GetParentTasksForProject")]
+        [HttpGet]
+        public ICollection<TaskModel> GetParentTasksForProject([FromUri]ProjectModel query)
+        {
+            var result = pmService.GetParentTasksForProject(query);
+            Console.WriteLine(result.ToString());
+            return result;
+        }
+
+        [Route("api/Task/GetAllTaskForProject")]
+        [HttpGet]
+        public ICollection<TaskModel> GetAllTaskForProject([FromUri]ProjectModel query)
+        {
+            var result = pmService.GetAllTaskForProject(query);
             Console.WriteLine(result.ToString());
             return result;
         }
@@ -256,39 +251,6 @@ namespace ProjectManager.API.Controllers
             Console.WriteLine(result.ToString());
             return result;
         }
-
-        //[Route("api/Project/GetProjects")]
-        //[HttpGet]
-        //public ICollection<ProjectModel> GetProjects()
-        //{
-        //    var result = pmService.GetProjects();
-        //    Console.WriteLine(result.ToString());
-        //    return result;
-        //}
-
-        //[Route("api/Task/UpdateTask")]
-        //[ResponseType(typeof(TaskModel))]
-        //[HttpPost]
-        //public IHttpActionResult Delete(TaskModel task)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    //UserModel userModel = pmService.GetUserById(user.UserId);
-        //    //if (userModel == null)
-        //    //{
-        //    //    return BadRequest();
-        //    //}
-        //    var result = pmService.UpdateTaks(task);
-
-        //    if (result != null)
-        //    {
-        //        return StatusCode(HttpStatusCode.OK);
-        //    }
-        //    return BadRequest();
-        //}
 
     }
 }

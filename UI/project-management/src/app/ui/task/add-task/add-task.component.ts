@@ -225,7 +225,7 @@ export class AddTaskComponent implements OnInit {
     //   });
 
     this.DialogResult.pipe(filter(x => x)).subscribe(x => {
-      this.model.Project = this.projectControl.value;
+      //this.model.Project = this.projectControl.value;
       this.model.TaskDescription = this.taskControl.value;
       if (this.isParentTaskControl.value === false) {
         this.model.IsParentTask = false;
@@ -263,8 +263,13 @@ export class AddTaskComponent implements OnInit {
         this.model.Priority = 0;
         this.model.ParentTask = null;
         this.model.ParentTaskId = null;
-        this.model.User = null;
-        this.model.UserId = null;
+        this.model.UserId =
+          this.selectedUser === null || this.selectedUser === undefined
+            ? null
+            : this.selectedUser.UserId;
+        
+        this.model.User=this.selectedUser;
+
         this.model.StartDate = null;
         this.model.EndDate = null;
         this.model.IsClosed = false;
@@ -338,7 +343,7 @@ export class AddTaskComponent implements OnInit {
 
   initFormsControl(): void {
     this.projectControl = new FormControl(
-      this.model.Project,
+      this.model.Project.Project,
       Validators.required
     );
 
@@ -422,11 +427,11 @@ export class AddTaskComponent implements OnInit {
           Validators.max(Const.priorityMax)
         ]);
 
-        this.parentTaskControl.disable();
+        //this.parentTaskControl.disable();
 
-        this.projectControl.disable();
+        //this.projectControl.disable();
 
-        this.userControl.disable();
+        this.userControl.enable();
         this.userControl.setValidators([Validators.required]);
       } else {
         this.startDateControl.disable();
@@ -442,8 +447,8 @@ export class AddTaskComponent implements OnInit {
 
         this.parentTaskControl.disable();
 
-        this.userControl.disable();
-        this.userControl.clearValidators();
+        // this.userControl.disable();
+        // this.userControl.clearValidators();
       }
       this.model.IsParentTask = x as boolean;
     });
@@ -476,7 +481,7 @@ export class AddTaskComponent implements OnInit {
     this.columnsDisplay = ["TaskDescription", "StartDate", "EndDate"];
     this.searchFields = ["TaskDescription"];
     this.popupModelType = "ParentTask";
-    this.service.getParentTasks().subscribe(x => {
+    this.service.getAllParentTasksForProject(this.selectedProject).subscribe(x => {
       this.serarchInputValues = x;
       this.searchModalDisplayed = true;
       this.serviceBus.CommonSearchObservable.next(true);

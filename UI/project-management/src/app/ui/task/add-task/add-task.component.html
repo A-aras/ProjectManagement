@@ -4,12 +4,15 @@
       <div class="row container-fluid reponseiveRowMargin">
         <label for="projectInput" class="col-form-label col-sm-1 reponsiveLabel">Project :
         </label>
-        <input id="projectInput" type="text" placeholder="Project..." class="form-control col-sm-5" [formControl]="projectControl"
+        <input id="projectInput" type="text" placeholder="Project..." class="form-control col-sm-5" [readonly]="true" [formControl]="projectControl"
         />
         <div class="form-group form-inline col-sm-2 col-ignore-padding">
           <button class="btn btn-primary btn-reponsive-margin" (click)="onSearchProject()" value="Search" [disabled]="btnAction==='Save'">
             Search
           </button>
+        </div>
+        <div *ngIf="projectControl.invalid &&  projectControl.dirty && projectControl.errors?.required" class="alert alert-danger col-sm-4">
+          Project is Required
         </div>
       </div>
 
@@ -88,7 +91,7 @@
       <div class="row container-fluid reponseiveRowMargin">
         <label for="parentTaskInput" class="col-form-label col-sm-1 reponsiveLabel">Parent Task :
         </label>
-        <input id="parentTaskInput" type="text" placeholder="Parent Task..." class="form-control col-sm-5" [formControl]="parentTaskControl"
+        <input id="parentTaskInput" type="text" placeholder="Parent Task..." [readonly]="true" class="form-control col-sm-5" [formControl]="parentTaskControl"
         />
         <div class="form-group form-inline col-sm-2 col-ignore-padding">
           <button class="btn btn-primary btn-reponsive-margin" [disabled]="model.IsParentTask" (click)="onSearchParentTask()" value="Search">
@@ -145,14 +148,14 @@
       <div class="row container-fluid reponseiveRowMargin">
         <label for="userInput" class="col-form-label col-sm-1 reponsiveLabel">User :
         </label>
-        <input id="userInput" type="text" placeholder="User..." class="form-control col-sm-5" [formControl]="userControl" />
+        <input id="userInput" type="text" placeholder="User..." [readonly]="true" class="form-control col-sm-5" [formControl]="userControl" />
 
         <div class="form-group form-inline col-sm-2 col-ignore-padding">
-          <button class="btn btn-primary btn-reponsive-margin" [disabled]="model.IsParentTask" (click)="onSearchUser()" value="Search">
+          <button class="btn btn-primary btn-reponsive-margin" (click)="onSearchUser()" value="Search">
             Search
           </button>
         </div>
-        <div *ngIf="userControl.invalid && userControl.errors?.required" class="alert alert-danger col-sm-4">
+        <div *ngIf="userControl.invalid && userControl.dirty && userControl.errors?.required" class="alert alert-danger col-sm-4">
           User is Required
         </div>
       </div>

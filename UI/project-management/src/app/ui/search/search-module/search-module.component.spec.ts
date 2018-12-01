@@ -26,6 +26,8 @@ import {
 } from "ngx-bootstrap";
 import { priorityMin, priorityMax } from "src/app/Const/const";
 import { SearchModuleComponent } from './search-module.component';
+import { AppModuleUnitTestFixture } from "src/app/app.module.unittest.fixture";
+import { PmApiServiceFake } from "src/app/service/pm-api.service.fake";
 
 describe('SearchModuleComponent', () => {
   let location: Location;
@@ -36,10 +38,10 @@ describe('SearchModuleComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      providers: [{ provide: IPmApiService, useClass: PMApiServiceMockData }],
+      providers: [{ provide: IPmApiService, useClass: PmApiServiceFake }],
       //declarations: [ AddUserComponent ]
       imports: [
-        AppModule,
+        AppModuleUnitTestFixture,
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
@@ -61,8 +63,8 @@ describe('SearchModuleComponent', () => {
      component.ngOnInit();
   });
 
-  // it('When Search Module Component Created Injector Injects all required Inputs should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
+  it('When Search Module Component Created Injector Injects all required Inputs should create', () => {
+    expect(component).toBeTruthy();
+  });
 
 });

@@ -27,6 +27,7 @@ import {
 import { priorityMin, priorityMax } from "src/app/Const/const";
 import { ViewTaskComponent } from './view-task.component';
 import { PmServiceBus } from "src/app/service/service_bus";
+import { AppModuleUnitTestFixture } from "src/app/app.module.unittest.fixture";
 
 describe('ViewTaskComponent', () => {
   let location: Location;
@@ -44,7 +45,7 @@ describe('ViewTaskComponent', () => {
       ],
       //declarations: [ AddUserComponent ]
       imports: [
-        AppModule,
+        AppModuleUnitTestFixture,
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,

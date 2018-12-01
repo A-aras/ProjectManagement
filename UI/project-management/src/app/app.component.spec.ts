@@ -26,7 +26,7 @@ import {
 } from "ngx-bootstrap";
 import { priorityMin, priorityMax } from "src/app/Const/const";
 
-import { AppComponent } from './app.component';
+import { AppComponent } from "./app.component";
 import { UserDashboardComponent } from "src/app/ui/user/user-dashboard/user-dashboard.component";
 import { ViewUserComponent } from "src/app/ui/user/view-user/view-user.component";
 import { AddUserComponent } from "src/app/ui/user/add-user/add-user.component";
@@ -39,10 +39,13 @@ import { ArrayLenghtPipe } from "src/app/pipes/arraylenght.pipe";
 import { ViewTaskComponent } from "src/app/ui/task/view-task/view-task.component";
 import { AddTaskComponent } from "src/app/ui/task/add-task/add-task.component";
 import { SearchModuleComponent } from "src/app/ui/search/search-module/search-module.component";
+import { AppModuleUnitTestFixture } from "src/app/app.module.unittest.fixture";
+import { PmApiServiceFake } from "src/app/service/pm-api.service.fake";
 
-describe('AppComponent', () => {
+describe("AppComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      providers: [{ provide: IPmApiService, useClass: PmApiServiceFake }],
       declarations: [
         AppComponent,
         UserDashboardComponent,
@@ -59,20 +62,26 @@ describe('AppComponent', () => {
         AddTaskComponent,
         SearchModuleComponent
       ],
-      imports:[RouterTestingModule,ReactiveFormsModule,FormsModule ,
-        DatepickerModule,BsDatepickerModule,ModalModule]
+      imports: [
+        RouterTestingModule,
+        ReactiveFormsModule,
+        FormsModule,
+        DatepickerModule,
+        BsDatepickerModule,
+        ModalModule
+      ]
     }).compileComponents();
   }));
-  it('should create the app', async(() => {
+  it("should create the app", async(() => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   }));
-  // it(`should have as title 'project-management'`, async(() => {
-  //   const fixture = TestBed.createComponent(AppComponent);
-  //   const app = fixture.debugElement.componentInstance;
-  //   expect(app.title).toEqual('project-management');
-  // }));
+  it(`should have as title 'project-management'`, async(() => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app.title).toEqual("project-management");
+  }));
   // it('should render title in a h1 tag', async(() => {
   //   const fixture = TestBed.createComponent(AppComponent);
   //   fixture.detectChanges();

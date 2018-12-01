@@ -28,6 +28,7 @@ import { priorityMin, priorityMax } from "src/app/Const/const";
 
 import { AddTaskComponent } from './add-task.component';
 import { PmServiceBus } from "src/app/service/service_bus";
+import { AppModuleUnitTestFixture } from "src/app/app.module.unittest.fixture";
 
 describe('AddTaskComponent', () => {
 
@@ -44,7 +45,7 @@ describe('AddTaskComponent', () => {
     TestBed.configureTestingModule({
       //declarations: [ AddUserComponent ]
       imports: [
-        AppModule,
+        AppModuleUnitTestFixture,
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,

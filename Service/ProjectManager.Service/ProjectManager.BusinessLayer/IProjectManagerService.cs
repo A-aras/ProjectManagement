@@ -35,6 +35,9 @@ namespace ProjectManager.BusinessLayer
 
         #region ParentTask
         ICollection<TaskModel> GetParentTasks();
+
+        ICollection<TaskModel> GetParentTasksForProject(ProjectModel parentTask);
+
         //ParentTaskModel AddParentTask(ParentTaskModel parentTask);
         #endregion
 

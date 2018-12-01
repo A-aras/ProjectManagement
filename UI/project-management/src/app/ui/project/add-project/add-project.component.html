@@ -98,7 +98,7 @@
           <label for="managerInput" class="col-form-label col-sm-1 reponsiveLabel">Manager :
                   </label>
           <!-- <div class="form-group form-inline col-sm-5 col-ignore-padding"> -->
-          <input id="managerInput" type="text" placeholder="User..." class="form-control col-sm-5" [formControl]="managerControl" />
+          <input id="managerInput" type="text" placeholder="User..." class="form-control col-sm-5" [readonly]="true" [formControl]="managerControl" />
   
           <div class="form-group form-inline col-sm-2 col-ignore-padding">
             <button class="btn btn-primary btn-reponsive-margin" (click)="onSearchProjectManager()" value="Search">
